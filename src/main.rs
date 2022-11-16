@@ -2,6 +2,9 @@
 #![allow(non_snake_case)]
 use bevy::prelude::*;
 
+//assets
+const PLAYER_SPRITE: &str = "player_a_01.png";
+const PLAYER_SIZE: (f32,f32) = (144., 75.);
 
 fn main() {
     //this stuff creates the app, builds a window and calls our setup
@@ -21,17 +24,14 @@ fn main() {
 }
 
 //this function handles inital setup of things such as camera 
-fn setup_system(mut commands: Commands) {
+fn setup_system(mut commands: Commands, asset_server: Res<AssetServer>) {
     //camera 
     commands.spawn(Camera2dBundle::default());
 
     //add rect
     commands.spawn(SpriteBundle {
-        sprite: Sprite {
-            color: Color::rgb(0.25,0.25,0.75),
-            custom_size: Some(Vec2::new(150.0,150.0)),
-            ..default()
-        },
+       texture: asset_server.load(PLAYER_SPRITE),
+       
         ..default()
     });
 }
