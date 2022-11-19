@@ -7,10 +7,12 @@ use components::*;
 mod player;
 mod components;
 
-//assets
+//constants
 const PLAYER_SPRITE: &str = "player_a_01.png";
 const PLAYER_SIZE: (f32,f32) = (144., 75.);
 const SPRITE_SCALE: f32 = 0.5;
+const TIME_STEP: f32 = 1.0 / 60.0;
+const BASE_SPEED: f32 = 500.0;
 
 
 //this is a resource that holds the window size
