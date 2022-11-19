@@ -1,6 +1,11 @@
 #![allow(unused)]
 #![allow(non_snake_case)]
 use bevy::prelude::*;
+use player::PlayerPlugin;
+use components::*;
+
+mod player;
+mod components;
 
 //assets
 const PLAYER_SPRITE: &str = "player_a_01.png";
@@ -16,6 +21,11 @@ pub struct WinSize {
     pub h: f32,
 }
 
+#[derive(Resource)]
+struct GameTexture {
+    player: Handle<Image>,
+}
+
 fn main() {
     //this stuff creates the app, builds a window and calls our setup
     App::new()
@@ -29,8 +39,8 @@ fn main() {
         },
         ..default()
     }))
+    .add_plugin(PlayerPlugin)
     .add_startup_system(setup_system)
-    .add_startup_system_to_stage(StartupStage::PostStartup, player_spawn_system)
     .run();
 }
 
@@ -43,27 +53,19 @@ fn setup_system(mut commands: Commands, asset_server: Res<AssetServer>, mut wind
     let window = windows.get_primary_mut().unwrap();
     let (win_w, win_h) = (window.width(), window.height());
 
+    //add window size to resources
     let win_size = WinSize {
         w: win_w,
         h: win_h,
     };
     commands.insert_resource(win_size);
 
+    //add game tex to resources
+    let game_tex = GameTexture {
+        player: asset_server.load(PLAYER_SPRITE),
+    };
+    commands.insert_resource(game_tex);
+
     //position window 
     //window.set_position(MonitorSelection::Primary, IVec2::new(2780,4900));
-}
-
-fn player_spawn_system(mut commands: Commands, asset_server: Res<AssetServer>,  win_size: Res<WinSize>) {
-    
-    //add rect
-    let bottom = -win_size.h/2.0;
-    commands.spawn(SpriteBundle {
-       texture: asset_server.load(PLAYER_SPRITE),
-        transform: Transform {
-            translation: Vec3::new(0.0, bottom+ PLAYER_SIZE.1 / 2. * SPRITE_SCALE + 5. , 10.),
-            scale: Vec3::new(SPRITE_SCALE,SPRITE_SCALE,1.),
-            ..default()
-        },
-        ..default()
-    });
 }
