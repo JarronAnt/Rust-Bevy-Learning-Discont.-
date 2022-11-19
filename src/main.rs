@@ -2,19 +2,27 @@
 #![allow(non_snake_case)]
 use bevy::prelude::*;
 use player::PlayerPlugin;
+use enemy::EnemyPlugin;
 use components::*;
 
 mod player;
 mod components;
+mod enemy;
 
 //constants
 const PLAYER_SPRITE: &str = "player_a_01.png";
 const PLAYER_LASER_SPRITE: &str = "laser_a_01.png";
 const PLAYER_LASER_SIZE: (f32, f32) = (9.0, 54.0);
 const PLAYER_SIZE: (f32,f32) = (144., 75.);
+
 const SPRITE_SCALE: f32 = 0.5;
 const TIME_STEP: f32 = 1.0 / 60.0;
 const BASE_SPEED: f32 = 500.0;
+
+const ENENMY_SPIRTE: &str = "enemy_a_01.png";
+const ENEMY_SIZE: (f32, f32) = (144., 75.);
+const ENEMY_LASER_SPRITE: &str = "laser_b_01.png";
+const ENEMY_LASER_SIZE: (f32, f32) = (17.0, 55.0);
 
 
 //this is a resource that holds the window size
@@ -29,6 +37,8 @@ pub struct WinSize {
 struct GameTexture {
     player: Handle<Image>,
     player_laser: Handle<Image>,
+    enemy: Handle<Image>,
+    enemy_laser: Handle<Image>,
 }
 
 fn main() {
@@ -45,6 +55,7 @@ fn main() {
         ..default()
     }))
     .add_plugin(PlayerPlugin)
+    .add_plugin(EnemyPlugin)
     .add_startup_system(setup_system)
     .add_system(movement_system)
     .run();
@@ -70,6 +81,8 @@ fn setup_system(mut commands: Commands, asset_server: Res<AssetServer>, mut wind
     let game_tex = GameTexture {
         player: asset_server.load(PLAYER_SPRITE),
         player_laser: asset_server.load(PLAYER_LASER_SPRITE),
+        enemy: asset_server.load(ENENMY_SPIRTE),
+        enemy_laser: asset_server.load(ENEMY_LASER_SPRITE),
     };
     commands.insert_resource(game_tex);
 
