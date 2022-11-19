@@ -1,4 +1,5 @@
 use bevy::prelude::Component;
+use bevy::math::Vec2;
 
 #[derive(Component)]
 pub struct Velocity {
@@ -13,3 +14,9 @@ pub struct Player;
 pub struct Moveable {
     pub auto_despawn: bool,
 }
+
+#[derive(Component)]
+pub struct Laser;
+
+#[derive(Component)]
+pub struct SpriteSize(pub Vec2);
